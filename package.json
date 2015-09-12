@@ -1,0 +1,16 @@
+{
+  "name": "pushNoServer",
+  "version": "1.0.0",
+  "description": "for push notification",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apn": "^1.7.4",
+    "express": "^4.13.3",
+    "node-gcm": "^0.12.0"
+  }
+}
