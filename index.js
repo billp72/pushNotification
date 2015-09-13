@@ -7,13 +7,12 @@ var
     Firebase = require('firebase'),
     app = express(),
     ref = new Firebase('https://incandescent-torch-5679.firebaseio.com/push_notifications');
-/*
-, function(){
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log(port, host);
-}
-*/
+
+
+app.set('port', (process.env.PORT || 5000));
+
+//app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -23,14 +22,28 @@ app.use(function(req, res, next){
   next();
 });
 
+// views is directory for all template files
+//app.set('views', __dirname + '/views');
+//app.set('view engine', 'ejs');
+
+//app.get('/', function(request, response) {
+    //response.render('pages/index');
+//});
+
+app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
+});
+
+
 app.post('/register', function(req, res){
     var 
         device_token = req.body.device_token,
-        device_type = req.body.device_type;
+        device_type  = req.body.device_type,
+        userID       = req.body.userID;
 
         ref.once('value', function(snapshot){
             if(!snapshot.hasChild(device_token)){
-                ref.child(device_token).set({'deviceToken': device_token, 'deviceType': device_type});
+                ref.child(userID).set({'deviceToken': device_token, 'deviceType': device_type});
             }
         });
 
@@ -39,7 +52,7 @@ app.post('/register', function(req, res){
 
 app.get('/push', function(req, res){
         //if(!val){
-    ref.Child(req.query.device_token).on('value', function(snapshot) {
+    ref.Child(req.query.userID).on('value', function(snapshot) {
         var val = snapshot.val();
         
       
@@ -84,5 +97,3 @@ app.get('/push', function(req, res){
         res.send('ok');
     });
 });
-
-app.listen(8000);
