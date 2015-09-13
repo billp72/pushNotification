@@ -93,7 +93,6 @@ app.get('/push', function(req, res){
                 apnConnection.pushNotification(note, device);
         }
 
-
-        res.send('ok');
     });
+    res.send('ok');
 });
