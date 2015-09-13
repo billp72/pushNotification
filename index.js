@@ -2,7 +2,7 @@
 var express = require('express');
 var gcm = require('node-gcm');
 var apn = require('apn');
-
+var bodyParser = require('body-parser');
 var app = express();
 var device_token;
 
@@ -13,6 +13,8 @@ var device_token;
     console.log(port, host);
 }
 */
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(function(req, res, next){
   res.header("Access-Control-Allow-Origin", "*");

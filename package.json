@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "apn": "^1.7.4",
+    "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "node-gcm": "^0.12.0"
   }
