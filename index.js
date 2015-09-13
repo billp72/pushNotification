@@ -6,8 +6,7 @@ var
     bodyParser = require('body-parser'),
     Firebase = require('firebase'),
     app = express(),
-    ref = new Firebase('https://incandescent-torch-5679.firebaseio.com/push_notifications'),
-    device_token;
+    ref = new Firebase('https://incandescent-torch-5679.firebaseio.com/push_notifications');
 /*
 , function(){
     var host = server.address().address;
@@ -25,19 +24,25 @@ app.use(function(req, res, next){
 });
 
 app.post('/register', function(req, res){
-    device_token = req.body.device_token;
-    userID = req.body.userID;
-    device_type = req.body.deviceType;
-    ref.push({ 'userID':userID, 'deviceToken': device_token, 'deviceType': device_type});
-    console.log(device_token);
-    //add token to database
+    var 
+        device_token = req.body.device_token,
+        device_type = req.body.device_type;
+
+        ref.once('value', function(snapshot){
+            if(!snapshot.hasChild(device_token)){
+                ref.child(device_token).set({'deviceToken': device_token, 'deviceType': device_type});
+            }
+        });
+
     res.send('ok');
 });
 
 app.get('/push', function(req, res){
-    ref.orderByChild('userID').equalTo(req.query.userID).on("child_added", function(snapshot) {
+        //if(!val){
+    ref.Child(req.query.device_token).on('value', function(snapshot) {
         var val = snapshot.val();
-
+        
+      
         if(val.deviceType === 'android'){
             var 
                 device_tokens = [], //create array for storing device tokens
@@ -57,7 +62,7 @@ app.get('/push', function(req, res){
 
                 sender.send(message, device_tokens, retry_times, function(result){
                     console.log(result);
-                    console.log('push sent to: ' + device_token);
+                    console.log('push sent to: ' + val.deviceToken);
                 });
         }else if(val.deviceType === 'ios'){
             var 
@@ -74,9 +79,10 @@ app.get('/push', function(req, res){
 
                 apnConnection.pushNotification(note, device);
         }
-    });
 
-    res.send('ok');
+
+        res.send('ok');
+    });
 });
 
 app.listen(8000);
