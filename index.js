@@ -52,7 +52,7 @@ app.post('/register', function(req, res){
 
 app.get('/push', function(req, res){
         //if(!val){
-    ref.Child(req.query.userID).on('value', function(snapshot) {
+    ref.child(req.query.userID).on('value', function(snapshot) {
         var val = snapshot.val();
         
       
@@ -60,7 +60,7 @@ app.get('/push', function(req, res){
             var 
                 device_tokens = [], //create array for storing device tokens
                 retry_times = 4, //the number of times to retry sending the message if it failed
-                sender = new gcm.Sender('AIzaSyDpA0b2smrKyDUSaP0Cmz9hz4cQ19Rxn7U'), //create a new sender
+                sender = new gcm.Sender('AIzaSyAbXzuAUk1EICCdfpZhoA6-TleQrPWxJuI'), //create a new sender
                 message = new gcm.Message(); //create a new message
 
                 message.addData('title', 'Open Circles');
